@@ -1,0 +1,25 @@
+{
+  "rebalance_count": 27,
+  "trigger_counts": {
+    "time": 27
+  },
+  "initial_capital": 10000.0,
+  "final_capital": 9865.626514516016,
+  "total_return_pct": -1.3437348548398398,
+  "annualized_return": -15.088910912317422,
+  "total_fees_collected": 0.028192270294765873,
+  "total_il_incurred": -0.035726005851535764,
+  "total_rebalance_costs": 134.36595174842122,
+  "net_return": -134.373485483978,
+  "sharpe_ratio": -0.7628438929838917,
+  "sortino_ratio": -0.01611271716457123,
+  "calmar_ratio": -11.229079817431792,
+  "max_drawdown_pct": 1.3437352977840364,
+  "max_drawdown_duration": 215,
+  "recovery_time": 0,
+  "win_rate": 0.8703703703703703,
+  "profit_factor": 0.7315257617564757,
+  "win_loss_ratio": 0.10895064536798574,
+  "avg_time_between_rebalances": 1.1181730769230769,
+  "strategy_name": "Moderate"
+}

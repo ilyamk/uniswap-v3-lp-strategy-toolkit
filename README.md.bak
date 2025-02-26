@@ -1,0 +1,262 @@
+# Uniswap V3 Liquidity Provision Strategy
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+A sophisticated toolkit for collecting Uniswap V3 pool data and backtesting dynamic liquidity provision strategies with timestamp-based rebalancing.
+
+## 📋 Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Data Collection](#data-collection)
+  - [Strategy Backtesting](#strategy-backtesting)
+- [Strategy Types](#strategy-types)
+- [Output Files](#output-files)
+- [Analyzing Results](#analyzing-results)
+- [Examples](#examples)
+- [Contributing](#contributing)
+- [License](#license)
+
+## 🔍 Overview
+
+This project provides tools to analyze Uniswap V3 pools and develop optimized liquidity provision strategies. It consists of two main components:
+
+1. **Pool Data Collector** (`pool_data.py`): Collects comprehensive historical data from Uniswap V3 pools.
+2. **Liquidity Strategy** (`liquidity_strategy.py`): Implements and backtests various liquidity provision strategies with timestamp-based rebalancing.
+
+The toolkit helps liquidity providers optimize their capital efficiency by determining when to rebalance positions and how to size position ranges based on historical volatility.
+
+## ✨ Features
+
+### Pool Data Collector
+- Historical price and liquidity data collection
+- Impermanent loss calculation
+- Volatility estimation
+- Active ticks analysis
+- Data visualization
+
+### Liquidity Strategy
+- Time-based rebalancing (hourly, daily, weekly, or custom intervals)
+- Adaptive rebalancing based on multiple triggers (time, price change, volatility)
+- Dynamic position sizing based on historical volatility
+- Performance metrics calculation (returns, IL, Sharpe ratio)
+- Strategy visualization and comparison
+
+## 🚀 Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/uniswap-v3-pool-data.git
+cd uniswap-v3-pool-data
+```
+
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+3. Set up your Ethereum RPC provider:
+   - Get an API key from [Alchemy](https://www.alchemy.com/) or [Infura](https://infura.io/)
+   - Update the `RPC_URL` in `pool_data.py` with your API key
+
+## 🛠️ Usage
+
+### Data Collection
+
+The `pool_data.py` script collects historical data from a Uniswap V3 pool.
+
+```bash
+python pool_data.py --pool <pool_address> --days <days_to_collect> --output <output_file>
+```
+
+#### Options:
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `--pool` | Uniswap V3 pool address | wstETH/ETH 0.01% pool |
+| `--days` | Number of days to collect data for | 365 |
+| `--step` | Block step for data collection | 1000 |
+| `--output` | Base name for output files | uniswap_v3_data |
+| `--ticks` | Include active ticks data (slower) | False |
+| `--backtest` | Run basic strategy backtesting | False |
+
+#### Example:
+
+```bash
+python pool_data.py --pool 0x109830a1AAaD605BbF02a9dFA7B0B92EC2FB7dAa --days 90 --output wsteth_eth_data
+```
+
+### Strategy Backtesting
+
+The `liquidity_strategy.py` script implements and backtests liquidity provision strategies.
+
+```bash
+python liquidity_strategy.py --data <pool_data_file> --strategy <strategy_type> --output <output_prefix>
+```
+
+#### Options:
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `--data` | Pool data CSV file | uniswap_v3_data_wstETH_WETH_0_pool_data.csv |
+| `--il` | Impermanent loss data CSV file | uniswap_v3_data_wstETH_WETH_0.01pct_impermanent_loss.csv |
+| `--tick-range` | Tick range for liquidity provision | 10 |
+| `--interval` | Rebalance interval: 'hourly', 'daily', 'weekly', or seconds | daily |
+| `--price-threshold` | Price change threshold for rebalancing in percent | 0.5 |
+| `--volatility-threshold` | Volatility threshold for rebalancing | 1.0 |
+| `--output` | Base name for output files | strategy_results |
+| `--strategy` | Strategy type: 'time' or 'adaptive' | adaptive |
+
+#### Examples:
+
+Time-based strategy with daily rebalancing:
+```bash
+python liquidity_strategy.py --data wsteth_eth_data_pool_data.csv --strategy time --interval daily --tick-range 15 --output time_daily_results
+```
+
+Adaptive strategy with price-based rebalancing:
+```bash
+python liquidity_strategy.py --data wsteth_eth_data_pool_data.csv --strategy adaptive --interval daily --price-threshold 0.1 --output adaptive_results
+```
+
+## 📊 Strategy Types
+
+### Time-Based Strategy
+Rebalances positions at fixed time intervals (hourly, daily, weekly, or custom). This strategy is simple but effective in many market conditions.
+
+### Adaptive Strategy
+Combines multiple rebalancing triggers:
+1. **Time-based**: Rebalance after a fixed time interval
+2. **Price-based**: Rebalance when price moves beyond a threshold
+3. **Volatility-based**: Rebalance during high volatility periods
+
+Both strategies dynamically adjust the position range based on recent price volatility, which helps optimize capital efficiency.
+
+## 📁 Output Files
+
+### Pool Data Collector
+- `<output>_pool_data.csv`: Historical pool data (price, liquidity, etc.)
+- `<output>_impermanent_loss.csv`: Calculated impermanent loss data
+- `<output>_metadata.json`: Pool metadata
+- `<output>_plot.png`: Price and liquidity visualization
+- `<output>_ticks_data.csv`: Active ticks data (if `--ticks` option is used)
+
+### Liquidity Strategy
+- `<output>_rebalance_events.csv`: Details of each rebalancing event
+- `<output>_metrics.json`: Strategy performance metrics
+- `<output>_plot.png`: Strategy visualization
+
+## 📈 Analyzing Results
+
+### Key Metrics
+
+1. **Total Rebalances**: Number of position adjustments during the backtest period
+2. **Total Fees Collected**: Estimated fees earned from providing liquidity
+3. **Total IL Incurred**: Impermanent loss experienced during the backtest
+4. **Net Return**: Fees collected minus impermanent loss
+5. **Annualized Return**: Net return projected to an annual basis
+6. **Sharpe Ratio**: Risk-adjusted return metric (higher is better)
+7. **Average Days Between Rebalances**: Frequency of position adjustments
+
+### Rebalance Events Analysis
+
+The `<output>_rebalance_events.csv` file contains detailed information about each rebalancing event:
+
+| Column | Description |
+|--------|-------------|
+| `timestamp` | Unix timestamp of the rebalance |
+| `datetime` | Human-readable date and time |
+| `old_range_low` | Lower tick of previous position |
+| `old_range_high` | Upper tick of previous position |
+| `new_range_low` | Lower tick of new position |
+| `new_range_high` | Upper tick of new position |
+| `price` | Token price at rebalance time |
+| `trigger` | What triggered the rebalance (time, price, volatility) |
+| `time_since_last` | Seconds since previous rebalance |
+| `price_change_pct` | Percentage price change since last rebalance |
+| `volatility` | Estimated daily volatility at rebalance time |
+
+### Strategy Metrics Analysis
+
+The `<output>_metrics.json` file contains aggregated performance metrics:
+
+```json
+{
+  "rebalance_count": 33,
+  "trigger_counts": {
+    "time": 24,
+    "price": 9
+  },
+  "total_fees_collected": 7.203147756483356e+18,
+  "total_il_incurred": -0.0010808302721931895,
+  "net_return": 7.203147756483356e+18,
+  "annualized_return": 8.709275834259595e+19,
+  "sharpe_ratio": 14.651008641211956,
+  "avg_time_between_rebalances": 0.8954340277777778
+}
+```
+
+### Visualization
+
+The `<output>_plot.png` file provides a visual representation of the strategy performance:
+
+1. **Top Panel**: Price chart with rebalance events marked
+2. **Middle Panel**: Pool liquidity over time
+3. **Bottom Panel**: Cumulative returns, fees, and impermanent loss
+
+## 🌟 Examples
+
+### Example 1: Collecting Data for wstETH/ETH Pool
+
+```bash
+python pool_data.py --pool 0x109830a1AAaD605BbF02a9dFA7B0B92EC2FB7dAa --days 90 --output wsteth_eth_data
+```
+
+This command collects 90 days of historical data for the wstETH/ETH 0.01% pool and saves it to files with the prefix `wsteth_eth_data`.
+
+### Example 2: Comparing Time-Based vs. Adaptive Strategies
+
+```bash
+# Run time-based strategy
+python liquidity_strategy.py --data wsteth_eth_data_pool_data.csv --strategy time --interval daily --output time_strategy
+
+# Run adaptive strategy
+python liquidity_strategy.py --data wsteth_eth_data_pool_data.csv --strategy adaptive --price-threshold 0.1 --output adaptive_strategy
+```
+
+Compare the metrics in `time_strategy_metrics.json` and `adaptive_strategy_metrics.json` to determine which strategy performs better.
+
+### Example 3: Optimizing Tick Range
+
+```bash
+# Test different tick ranges
+python liquidity_strategy.py --data wsteth_eth_data_pool_data.csv --strategy adaptive --tick-range 10 --output range_10
+python liquidity_strategy.py --data wsteth_eth_data_pool_data.csv --strategy adaptive --tick-range 20 --output range_20
+python liquidity_strategy.py --data wsteth_eth_data_pool_data.csv --strategy adaptive --tick-range 30 --output range_30
+```
+
+Compare the Sharpe ratios and returns to find the optimal tick range for your strategy.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+---
+
+## 📚 Additional Resources
+
+- [Uniswap V3 Whitepaper](https://uniswap.org/whitepaper-v3.pdf)
+- [Uniswap V3 Documentation](https://docs.uniswap.org/protocol/introduction)
+- [Understanding Impermanent Loss](https://pintail.medium.com/understanding-uniswap-v3-impermanent-loss-89305a214fcf) 

@@ -1,0 +1,26 @@
+{
+  "rebalance_count": 55,
+  "trigger_counts": {
+    "time": 53,
+    "price": 2
+  },
+  "initial_capital": 10000.0,
+  "final_capital": 9728.178959557523,
+  "total_return_pct": -2.71821040442477,
+  "annualized_return": -28.336891019601218,
+  "total_fees_collected": 0.026090298868266148,
+  "total_il_incurred": -0.04212252336708525,
+  "total_rebalance_costs": 271.80500821795005,
+  "net_return": -271.82104044244886,
+  "sharpe_ratio": -1.3007070311169464,
+  "sortino_ratio": -0.02786475077992601,
+  "calmar_ratio": -10.424831874746504,
+  "max_drawdown_pct": 2.718210841197885,
+  "max_drawdown_duration": 215,
+  "recovery_time": 0,
+  "win_rate": 0.8611111111111112,
+  "profit_factor": 0.5472946146897066,
+  "win_loss_ratio": 0.08827332494995269,
+  "avg_time_between_rebalances": 0.5487191358024691,
+  "strategy_name": "Aggressive"
+}

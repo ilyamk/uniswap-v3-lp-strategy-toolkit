@@ -1,0 +1,25 @@
+{
+  "rebalance_count": 14,
+  "trigger_counts": {
+    "time": 14
+  },
+  "initial_capital": 10000.0,
+  "final_capital": 9930.096466347208,
+  "total_return_pct": -0.69903533652792,
+  "annualized_return": -8.131644331379873,
+  "total_fees_collected": 0.028768257201071214,
+  "total_il_incurred": -0.03458107668486355,
+  "total_rebalance_costs": 69.8977208333159,
+  "net_return": -69.9035336527997,
+  "sharpe_ratio": -0.5765717788366669,
+  "sortino_ratio": -0.012253675177784999,
+  "calmar_ratio": -11.632590574986708,
+  "max_drawdown_pct": 0.6990398466241183,
+  "max_drawdown_duration": 209,
+  "recovery_time": 6,
+  "win_rate": 0.875,
+  "profit_factor": 0.7957084799047102,
+  "win_loss_ratio": 0.11367263998638716,
+  "avg_time_between_rebalances": 2.096720085470085,
+  "strategy_name": "Conservative"
+}
