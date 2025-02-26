@@ -1,5 +1,9 @@
 # Uniswap V3 LP Toolkit – Simulate, Backtest & Optimize Like a Degen
 
+<div align="center">
+  <img src="img/uni.jpeg" alt="Uniswap V3 LP Toolkit" width="600"/>
+</div>
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Python](https://img.shields.io/badge/python-3.7+-blue.svg)
 ![DeFi](https://img.shields.io/badge/DeFi-Uniswap_V3-blue)
@@ -12,6 +16,7 @@
 [![tqdm](https://img.shields.io/badge/tqdm-4.67.1-green.svg)](https://github.com/tqdm/tqdm)
 [![Ethereum](https://img.shields.io/badge/Ethereum-ETH-3C3C3D.svg)](https://ethereum.org/)
 [![Backtesting](https://img.shields.io/badge/Backtesting-Strategy-brightgreen.svg)](https://github.com/yourusername/uniswap-v3-pool-data)
+[![Multicall](https://img.shields.io/badge/Multicall-Optimized-blue.svg)](https://github.com/mds1/multicall)
 
 ## 👨‍💻 Core Contributor
 
@@ -69,13 +74,32 @@ The toolkit helps liquidity providers optimize their capital efficiency by deter
 ## ✨ Features
 
 ### Pool Data Collector
-- Historical price and liquidity data collection
-- Trading volume data from Uniswap Subgraph API
-- Tick-specific liquidity data for accurate fee estimation
-- Impermanent loss calculation
-- Volatility estimation
-- Active ticks analysis
-- Data visualization
+- **Robust RPC Management**:
+  - Automatic failover between multiple RPC providers
+  - Smart rate limit detection and cooldown periods
+  - Exponential backoff retry mechanism
+  - Prioritization of reliable RPC endpoints
+- **Optimized Data Collection**:
+  - Multicall batching with dynamic batch sizing
+  - Result caching to reduce redundant RPC calls
+  - Adaptive sampling based on price volatility
+  - Parallel processing with configurable worker threads
+- **Comprehensive Data Gathering**:
+  - Historical price and liquidity data collection
+  - Trading volume data from Uniswap Subgraph API
+  - Tick-specific liquidity data for accurate fee estimation
+  - Impermanent loss calculation
+  - Volatility estimation
+  - Active ticks analysis
+- **Performance Optimizations**:
+  - Block grouping by proximity for efficient querying
+  - Automatic batch size adjustment based on historical performance
+  - Memory-efficient caching with cleanup mechanisms
+  - Graceful degradation for rate-limited environments
+- **Data Visualization and Export**:
+  - Interactive price and liquidity charts
+  - Exportable datasets for further analysis
+  - Metadata preservation for reproducibility
 
 ### Liquidity Strategy
 - **Portfolio Value Tracking**:
@@ -95,9 +119,11 @@ The toolkit helps liquidity providers optimize their capital efficiency by deter
   - Sortino ratio (downside risk adjustment)
   - Calmar ratio (return relative to drawdown)
   - Win/loss metrics (win rate, profit factor)
+  - Detailed rebalance event analysis
 - **Strategy Comparison**:
   - Side-by-side comparison of multiple strategies
   - Conservative, moderate, and aggressive presets
+  - Trigger analysis (time vs. price vs. volatility)
 - **Visualization**:
   - Portfolio value over time
   - Maximum drawdown periods
@@ -108,8 +134,8 @@ The toolkit helps liquidity providers optimize their capital efficiency by deter
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/uniswap-v3-pool-data.git
-cd uniswap-v3-pool-data
+git clone https://github.com/ilyamk/uniswap-v3-lp-strategy-toolkit.git
+cd uniswap-v3-lp-strategy-toolkit
 ```
 
 2. Install dependencies:
@@ -118,14 +144,18 @@ pip install -r requirements.txt
 ```
 
 3. Set up your Ethereum RPC provider:
-   - Get an API key from [Alchemy](https://www.alchemy.com/) or [Infura](https://infura.io/)
-   - Update the `RPC_URL` in `pool_data.py` with your API key
+   - Get an API key from [Alchemy](https://www.alchemy.com/)
+   - Create a `.env` file with your API key:
+   ```
+   ALCHEMY_API_KEY=your_api_key_here
+   THEGRAPH_API_KEY=your_graph_api_key_here  # Optional, for volume data
+   ```
 
 ## 🛠️ Usage
 
 ### Data Collection
 
-The `pool_data.py` script collects historical data from a Uniswap V3 pool.
+The `pool_data.py` script collects historical data from a Uniswap V3 pool with robust RPC management and optimized data collection.
 
 ```bash
 python pool_data.py --pool <pool_address> --days <days_to_collect> --ticks --volume --export-ticks
@@ -199,7 +229,7 @@ This uses smaller batch sizes for multicall operations and parallel processing t
 
 ### Strategy Backtesting
 
-The `liquidity_strategy.py` script implements and backtests liquidity provision strategies.
+The `liquidity_strategy.py` script implements and backtests liquidity provision strategies with comprehensive performance metrics.
 
 ```bash
 python liquidity_strategy.py --data <pool_data_file> --strategy <strategy_type> --initial-capital <starting_usd> --daily-volume <avg_volume>
@@ -217,7 +247,7 @@ python liquidity_strategy.py --data <pool_data_file> --strategy <strategy_type> 
 | `--volatility-threshold` | Volatility threshold for rebalancing | 1.0 |
 | `--output` | Base name for output files | strategy_results |
 | `--strategy` | Strategy type: 'time' or 'adaptive' | adaptive |
-| `--initial-capital` | Initial capital in USD | 10000.0 |
+| `--initial-capital` | Initial capital in USD | 100,000 |
 | `--daily-volume` | Average daily trading volume in USD | None |
 | `--tick-data` | Path to tick data JSON file | None |
 | `--gas-price` | Gas price in Gwei for transaction cost calculation | 30.0 |
@@ -255,7 +285,7 @@ Both strategies dynamically adjust the position range based on recent price vola
 
 ## 📉 Performance Metrics
 
-The toolkit now calculates a comprehensive set of performance metrics:
+The toolkit calculates a comprehensive set of performance metrics:
 
 ### Basic Metrics
 - **Total Return**: Overall percentage return of the strategy
@@ -285,20 +315,21 @@ These metrics allow for comprehensive strategy evaluation and comparison.
 ### Pool Data Collector
 - `<output>_pool_data.csv`: Historical pool data (price, liquidity, volume)
 - `<output>_impermanent_loss.csv`: Calculated impermanent loss data
-- `<output>_metadata.json`: Pool metadata
+- `<output>_metadata.json`: Pool metadata including token details and collection parameters
 - `<output>_plot.png`: Price and liquidity visualization
 - `<output>_tick_data.json`: Active ticks data formatted for strategy use
+- `<output>_ticks_data.csv`: Detailed tick-specific liquidity data (if collected)
 
 ### Liquidity Strategy
-- `<output>_rebalance_events.csv`: Details of each rebalancing event
+- `<output>_rebalance_events.csv`: Details of each rebalancing event including triggers and costs
 - `<output>_metrics.json`: Comprehensive strategy performance metrics
-- `<output>_plot.png`: Enhanced strategy visualization with portfolio value
+- `<output>_plot.png`: Enhanced strategy visualization with portfolio value and performance attribution
 
 ## 📈 Analyzing Results
 
 ### Key Metrics
 
-The enhanced backtesting now includes:
+The enhanced backtesting includes:
 
 1. **Initial & Final Capital**: Starting capital and final portfolio value
 2. **Total Return & Annualized Return**: Overall and annualized performance
@@ -320,7 +351,7 @@ The enhanced backtesting now includes:
 
 ### Rebalance Events Analysis
 
-The `<output>_rebalance_events.csv` file now contains additional information:
+The `<output>_rebalance_events.csv` file contains detailed information:
 
 | Column | Description |
 |--------|-------------|
@@ -343,7 +374,7 @@ The `<output>_rebalance_events.csv` file now contains additional information:
 
 ### Enhanced Visualization
 
-The `<output>_plot.png` file now provides a more comprehensive visual representation:
+The `<output>_plot.png` file provides a comprehensive visual representation:
 
 1. **Price Panel**: Price chart with rebalance events marked by trigger type
 2. **Liquidity Panel**: Pool liquidity over time
@@ -374,7 +405,7 @@ This performs backtesting with realistic modeling of fees, slippage, and gas cos
 
 ```bash
 # Compare multiple strategy presets
-python liquidity_strategy.py --data wsteth_eth_data_0.01_pool_data.csv --initial-capital 10000 --compare-strategies --output strategy_comparison
+python liquidity_strategy.py --data wsteth_eth_data_0.01_pool_data.csv --initial-capital 100000 --compare-strategies --output strategy_comparison
 ```
 
 This runs backtests on conservative, moderate, and aggressive strategy presets and provides a comparison table of results.
@@ -384,7 +415,7 @@ This runs backtests on conservative, moderate, and aggressive strategy presets a
 ```bash
 # Optimize tick range for specific market conditions
 for range in 5 10 15 20 30; do
-  python liquidity_strategy.py --data wsteth_eth_data_0.01_pool_data.csv --strategy adaptive --tick-range $range --initial-capital 10000 --output range_${range}
+  python liquidity_strategy.py --data wsteth_eth_data_0.01_pool_data.csv --strategy adaptive --tick-range $range --initial-capital 100000 --output range_${range}
 done
 ```
 
@@ -398,10 +429,14 @@ Run multiple backtests with different parameters to find optimal settings.
 - Fix the fee calculation in the strategy simulation based on the correct [now it's only count the fees based on the collected tick data, that is not correct]
 - Add more strategies presets and more dynamic metrics to backtest
 - Implement AI Agent to automatically choose the best strategy and parameters based on the market conditions
+- Improve multicall batching with more intelligent batch size adjustment
+- Add support for more Uniswap V3 pools and other DEXes
+- Implement position range optimization based on historical liquidity distribution
+- Create a web interface for easier strategy visualization and comparison
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please feel free to submit a Pull Request to this [repository](https://github.com/ilyamk/uniswap-v3-lp-strategy-toolkit).
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
