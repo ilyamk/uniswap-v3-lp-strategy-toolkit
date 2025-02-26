@@ -1,7 +1,7 @@
-# Uniswap V3 LP Toolkit – Simulate, Backtest & Optimize Like a Degen
+# Uniswap V3 LP Strategy Toolkit – Simulate, Backtest & Optimize Like a Degen
 
 <div align="center">
-  <img src="img/uni.jpeg" alt="Uniswap V3 LP Toolkit" width="100%"/>
+  <img src="img/uniswap_banner.png" alt="Uniswap V3 LP StrategyToolkit" width="100%"/>
 </div>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
