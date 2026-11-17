@@ -5,22 +5,22 @@
 </div>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-![Python](https://img.shields.io/badge/python-3.7+-blue.svg)
+![Python](https://img.shields.io/badge/python-3.13-blue.svg)
 ![DeFi](https://img.shields.io/badge/DeFi-Uniswap_V3-blue)
-[![Web3](https://img.shields.io/badge/Web3-6.0.0-orange.svg)](https://github.com/ethereum/web3.py)
-[![Pandas](https://img.shields.io/badge/Pandas-2.2.3-151F6D.svg)](https://pandas.pydata.org/)
-[![NumPy](https://img.shields.io/badge/NumPy-1.26.4-013243.svg)](https://numpy.org/)
-[![Matplotlib](https://img.shields.io/badge/Matplotlib-3.10.0-11557c.svg)](https://matplotlib.org/)
-[![Plotly](https://img.shields.io/badge/Plotly-6.0.0-3F4F75.svg)](https://plotly.com/)
+[![Web3](https://img.shields.io/badge/Web3-8.0.0-orange.svg)](https://github.com/ethereum/web3.py)
+[![Pandas](https://img.shields.io/badge/Pandas-3.1.1-151F6D.svg)](https://pandas.pydata.org/)
+[![NumPy](https://img.shields.io/badge/NumPy-2.5.5-013243.svg)](https://numpy.org/)
+[![Matplotlib](https://img.shields.io/badge/Matplotlib-3.11.2-11557c.svg)](https://matplotlib.org/)
+[![Plotly](https://img.shields.io/badge/Plotly-7.1.0-3F4F75.svg)](https://plotly.com/)
 [![Seaborn](https://img.shields.io/badge/Seaborn-0.13.2-77AAAD.svg)](https://seaborn.pydata.org/)
-[![tqdm](https://img.shields.io/badge/tqdm-4.67.1-green.svg)](https://github.com/tqdm/tqdm)
+[![tqdm](https://img.shields.io/badge/tqdm-4.70.1-green.svg)](https://github.com/tqdm/tqdm)
 [![Ethereum](https://img.shields.io/badge/Ethereum-ETH-3C3C3D.svg)](https://ethereum.org/)
-[![Backtesting](https://img.shields.io/badge/Backtesting-Strategy-brightgreen.svg)](https://github.com/yourusername/uniswap-v3-pool-data)
+[![Backtesting](https://img.shields.io/badge/Backtesting-Strategy-brightgreen.svg)](https://github.com/ilyamk/uniswap-v3-lp-strategy-toolkit)
 [![Multicall](https://img.shields.io/badge/Multicall-Optimized-blue.svg)](https://github.com/mds1/multicall)
 
 ## 👨‍💻 Core Contributor
 
-[![Author](https://img.shields.io/badge/Author-ilia.eth-lightgrey?style=for-the-badge)](https://github.com/yourusername)
+[![Author](https://img.shields.io/badge/Author-ilyamk-lightgrey?style=for-the-badge)](https://github.com/ilyamk)
 [![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/ilia_0x)
 [![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](http://twitter.com/ilia_0x)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/maksimenka/)
@@ -59,6 +59,7 @@ _________________
 - [Output Files](#output-files)
 - [Analyzing Results](#analyzing-results)
 - [Examples](#examples)
+- [Testing](#testing)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -138,9 +139,11 @@ git clone https://github.com/ilyamk/uniswap-v3-lp-strategy-toolkit.git
 cd uniswap-v3-lp-strategy-toolkit
 ```
 
-2. Install dependencies:
+2. Install dependencies (Python 3.13, [uv](https://docs.astral.sh/uv/)):
 ```bash
-pip install -r requirements.txt
+uv venv -p 3.13
+source .venv/bin/activate
+uv pip install -r requirements.txt
 ```
 
 3. Set up your Ethereum RPC provider:
@@ -434,6 +437,25 @@ Run multiple backtests with different parameters to find optimal settings.
 - Implement position range optimization based on historical liquidity distribution
 - Create a web interface for easier strategy visualization and comparison
 
+## 🧪 Testing
+
+The project has no automated test suite yet. Every dependency update is verified with the following checks:
+
+1. **Imports** – both modules load with the pinned dependencies:
+   ```bash
+   python -c "import pool_data, liquidity_strategy"
+   ```
+2. **Backtest regression** – run the strategy comparison on the bundled wstETH/ETH data and compare the metrics with the committed `strategy_comparison_*_metrics.json` files (they must match up to floating-point noise, ~1e-9):
+   ```bash
+   MPLBACKEND=Agg python liquidity_strategy.py --data wsteth_eth_data_0.01_pool_data.csv \
+     --initial-capital 10000 --compare-strategies --output /tmp/strategy_check
+   ```
+   The run is also repeated with `-W error::FutureWarning` to catch pandas/NumPy deprecations.
+3. **On-chain smoke test** – with `ALCHEMY_API_KEY` set in `.env`, collect one day of data to check the web3 and multicall integration:
+   ```bash
+   python pool_data.py --days 1 --step 2000 --no-parallel --output /tmp/smoke
+   ```
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request to this [repository](https://github.com/ilyamk/uniswap-v3-lp-strategy-toolkit).
@@ -446,7 +468,9 @@ Contributions are welcome! Please feel free to submit a Pull Request to this [re
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
+
+Copyright (c) 2025-2026 ilyamk
 
 ---
 

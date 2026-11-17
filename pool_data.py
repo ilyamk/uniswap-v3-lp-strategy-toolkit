@@ -27,7 +27,7 @@ import matplotlib.pyplot as plt
 from dotenv import load_dotenv
 
 from web3 import Web3
-from web3.middleware import geth_poa_middleware
+from web3.middleware import ExtraDataToPOAMiddleware
 from multicall import Call, Multicall
 import random
 from requests.exceptions import RequestException, Timeout
@@ -108,7 +108,7 @@ class RPCManager:
         w3 = Web3(Web3.HTTPProvider(rpc_url, request_kwargs={"timeout": 30}))
         
         # Add middleware for better compatibility
-        w3.middleware_onion.inject(geth_poa_middleware, layer=0)
+        w3.middleware_onion.inject(ExtraDataToPOAMiddleware, layer=0)
         
         return w3
     
