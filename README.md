@@ -1,4 +1,4 @@
-# Uniswap V3 LP Strategy Toolkit – Simulate, Backtest & Optimize Like a Degen
+# Uniswap V3 LP Strategy Toolkit – Simulate, Backtest & Optimise LP Strategies
 
 <div align="center">
   <img src="img/uniswap_banner.png" alt="Uniswap V3 LP StrategyToolkit" width="100%"/>
@@ -22,25 +22,21 @@
 
 [![Author](https://img.shields.io/badge/Author-ilyamk-lightgrey?style=for-the-badge)](https://github.com/ilyamk)
 [![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/ilia_0x)
-[![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](http://twitter.com/ilia_0x)
+[![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://x.com/ILIA_AGI)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/maksimenka/)
 [![Ethereum](https://img.shields.io/badge/Donate_ETH-3C3C3D?style=for-the-badge&logo=ethereum&logoColor=white)](https://etherscan.io/address/0x8746B03bc7297359818C30e378AF507379E79a07) 
 
 ## 📝 Project Description
 
-A sophisticated toolkit for collecting Uniswap V3 pool data and backtesting dynamic liquidity provision strategies with realistic trading costs, impermanent loss, and comprehensive performance metrics.
+Collect Uniswap V3 pool data and backtest dynamic liquidity provision strategies, accounting for fees, impermanent loss and rebalancing costs.
 
 _____________
 <div align="center">
 
-### 🚨 <span style="color:red"> WARNING </span> 🚨
-<div style="color:red">
-  
-**This code is deep in the trenches of development—not production-ready.**  
-**If you're not a Python chad or a true DeFi degen, stay away before you get rekt.**  
-**Touch at your own risk. 🔥🐸💀**
-  
-</div>
+### ⚠️ Disclaimer
+
+**Research code, not production code.**  
+Use it for analysis and experimentation only; it is not financial advice. Review the code and test thoroughly before using it with real funds.
 </div>
 
 _________________
